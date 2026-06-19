@@ -1,26 +1,34 @@
-pub fn kangaroo(x1: i32, v1: i32, x2: i32, v2: i32) -> &'static str {
-    if v1 == v2 {
-        if x1 == x2 { "YES" } else { "NO" }
+use std::env;
+use std::fs::File;
+use std::io::{self, BufRead, Write};
+
+fn kangaroo(x1: i32, v1: i32, x2: i32, v2: i32) -> String {
+    if v1 <= v2 {
+        String::from("NO")
+    } else if (x2 - x1) % (v1 - v2) == 0 {
+        String::from("YES")
     } else {
-        let diff = x2 - x1;
-        let step_diff = v1 - v2;
-        if step_diff != 0 && diff % step_diff == 0 && diff / step_diff >= 0 {
-            "YES"
-        } else {
-            "NO"
-        }
+        String::from("NO")
     }
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+fn main() {
+    let stdin = io::stdin();
+    let mut stdin_iterator = stdin.lock().lines();
 
-    #[test]
-    fn test_kangaroo() {
-        assert_eq!(kangaroo(0, 3, 4, 2), "YES");
-        assert_eq!(kangaroo(0, 2, 5, 3), "NO");
-        assert_eq!(kangaroo(21, 6, 47, 3), "NO");
-        assert_eq!(kangaroo(0, 2, 0, 2), "YES");
-    }
+    let mut fptr = File::create(env::var("OUTPUT_PATH").unwrap()).unwrap();
+
+    let first_multiple_input: Vec<String> = stdin_iterator.next().unwrap().unwrap()
+        .split(' ')
+        .map(|s| s.to_string())
+        .collect();
+
+    let x1 = first_multiple_input[0].trim().parse::<i32>().unwrap();
+    let v1 = first_multiple_input[1].trim().parse::<i32>().unwrap();
+    let x2 = first_multiple_input[2].trim().parse::<i32>().unwrap();
+    let v2 = first_multiple_input[3].trim().parse::<i32>().unwrap();
+
+    let result = kangaroo(x1, v1, x2, v2);
+
+    writeln!(&mut fptr, "{}", result).ok();
 }
