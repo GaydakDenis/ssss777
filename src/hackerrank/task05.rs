@@ -1,11 +1,6 @@
-pub fn count_apples_and_oranges(
-    s: i32,
-    t: i32,
-    a: i32,
-    b: i32,
-    apples: &[i32],
-    oranges: &[i32],
-) -> (i32, i32) {
+use std::io::{self, BufRead};
+
+fn countApplesAndOranges(s: i32, t: i32, a: i32, b: i32, apples: &[i32], oranges: &[i32]) {
     let mut apple_count = 0;
     let mut orange_count = 0;
 
@@ -23,25 +18,49 @@ pub fn count_apples_and_oranges(
         }
     }
 
-    (apple_count, orange_count)
+    println!("{}", apple_count);
+    println!("{}", orange_count);
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+fn main() {
+    let stdin = io::stdin();
+    let mut stdin_iterator = stdin.lock().lines();
 
-    #[test]
-    fn test_count_apples_and_oranges() {
-        let s = 7;
-        let t = 11;
-        let a = 5;
-        let b = 15;
+    let first_multiple_input: Vec<String> = stdin_iterator.next().unwrap().unwrap()
+        .split(' ')
+        .map(|s| s.to_string())
+        .collect();
 
-        let apples = vec![-2, 2, 1];
-        let oranges = vec![5, -6];
+    let s = first_multiple_input[0].trim().parse::<i32>().unwrap();
+    let t = first_multiple_input[1].trim().parse::<i32>().unwrap();
 
-        let result = count_apples_and_oranges(s, t, a, b, &apples, &oranges);
+    let second_multiple_input: Vec<String> = stdin_iterator.next().unwrap().unwrap()
+        .split(' ')
+        .map(|s| s.to_string())
+        .collect();
 
-        assert_eq!(result, (1, 1));
-    }
+    let a = second_multiple_input[0].trim().parse::<i32>().unwrap();
+    let b = second_multiple_input[1].trim().parse::<i32>().unwrap();
+
+    let third_multiple_input: Vec<String> = stdin_iterator.next().unwrap().unwrap()
+        .split(' ')
+        .map(|s| s.to_string())
+        .collect();
+
+    let _m = third_multiple_input[0].trim().parse::<i32>().unwrap();
+    let _n = third_multiple_input[1].trim().parse::<i32>().unwrap();
+
+    let apples: Vec<i32> = stdin_iterator.next().unwrap().unwrap()
+        .trim_end()
+        .split(' ')
+        .map(|s| s.to_string().parse::<i32>().unwrap())
+        .collect();
+
+    let oranges: Vec<i32> = stdin_iterator.next().unwrap().unwrap()
+        .trim_end()
+        .split(' ')
+        .map(|s| s.to_string().parse::<i32>().unwrap())
+        .collect();
+
+    countApplesAndOranges(s, t, a, b, &apples, &oranges);
 }
